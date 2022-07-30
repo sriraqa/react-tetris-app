@@ -72,7 +72,7 @@ const Tetris = () => { //use curly brackets because there is more logic
                     </div>
                     )}
                     {/* callback prompt */}
-                    <StartButton onClick={startGame} />
+                    <StartButton callback={startGame} />
                 </aside>
             </StyledTetris>
         </StyledTetrisWrapper>
