@@ -5,5 +5,5 @@ import { TETROMINOS } from '../tetrominos';
 const Cell = ({ type }) => (
     <StyledCell type={type} color={TETROMINOS[type].color} />
 )
-
-export default Cell;
+//only rerender when the cell changes
+export default React.memo(Cell);
