@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { createStage } from '../gameHelpers';
+import { createStage, checkCollision } from '../gameHelpers';
 
 //styled components
 import { StyledTetrisWrapper, StyledTetris } from './styles/StyledTetris';
@@ -18,23 +18,37 @@ const Tetris = () => { //use curly brackets because there is more logic
     const [dropTime, setDropTime] = useState(null);
     const [gameOver, setGameOver] = useState(null);
 
-    const [player, updatePlayerPos, resetPlayer] = usePlayer();
-    const [stage, setStage] = useStage(player);
+    const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
+    const [stage, setStage] = useStage(player, resetPlayer);
     
     console.log('re-render');
 
     const movePlayer = dir => {
-        updatePlayerPos({ x: dir, y: 0 });
+        //if there is no collision, then do the move, otherwise no movement.
+        if(!checkCollision(player, stage, { x: dir, y: 0 })) {
+            updatePlayerPos({ x: dir, y: 0 });
+        }
     }
 
     const startGame = () => {
         //reset everything
         setStage(createStage());
         resetPlayer();
+        setGameOver(false);
     }
 
     const drop = () => {
-        updatePlayerPos({ x: 0, y: 1, collided: false })
+        if(!checkCollision(player, stage, { x: 0, y: 1})) {
+            updatePlayerPos({ x: 0, y: 1, collided: false })
+        }
+        else {
+            if(player.pos.y < 1) {
+                console.log("GAME OVER!");
+                setGameOver(true);
+                setDropTime(null);
+            }
+            updatePlayerPos({ x: 0, y: 0, collided: true });
+        }
     }
 
     const dropPlayer = () => {
@@ -43,14 +57,17 @@ const Tetris = () => { //use curly brackets because there is more logic
 
     const move = ({ keyCode }) => {
         if(!gameOver) {
-            if(keyCode === 37) {
+            if(keyCode === 37) { //right arrow
                 movePlayer(-1);
             }
-            else if(keyCode === 39) {
+            else if(keyCode === 39) { //left arrow
                 movePlayer(1);
             }
-            else if(keyCode === 40) {
+            else if(keyCode === 40) { //down arrow
                 dropPlayer();
+            }
+            else if(keyCode === 38) {  //up arrow
+                playerRotate(stage, 1);
             }
         }
     }
