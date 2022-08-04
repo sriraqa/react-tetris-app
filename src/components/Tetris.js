@@ -20,10 +20,12 @@ import StartButton from './StartButton';
 import waterLoop from './waterloop.wav';
 import musicLoop from './musicloop.mp3';
 import moveSound from './click.wav';
+import rotateSound from './swish.mp3';
 var audio1 = new Audio(waterLoop);
 var audio3 = new Audio(waterLoop);
 var audio2 = new Audio(musicLoop);
 var click = new Audio(moveSound);
+var swish = new Audio(rotateSound);
 
 const Tetris = () => { //use curly brackets because there is more logic
     const [dropTime, setDropTime] = useState(null);
@@ -101,7 +103,7 @@ const Tetris = () => { //use curly brackets because there is more logic
     }
 
     const keyUp = ({ keyCode }) => {
-        if(!gameOver) {
+        if(!gameOver && !gameStart) {
             if(keyCode === 40) {
                 setDropTime(1000 / (level + 1) + 200);
             }
@@ -129,6 +131,7 @@ const Tetris = () => { //use curly brackets because there is more logic
             }
             else if(keyCode === 38) {  //up arrow
                 playerRotate(stage, 1);
+                swish.play();
             }
         }
     }
