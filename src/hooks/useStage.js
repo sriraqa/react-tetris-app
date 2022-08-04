@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { createStage } from "../gameHelpers";
 
+//audio
+import plop from './plop.wav';
+var plopSound = new Audio(plop)
+
 export const useStage = (player, resetPlayer) => {
     const [stage, setStage] = useState(createStage());
     const [rowsCleared, setRowsCleared] = useState(0);
@@ -37,9 +41,12 @@ export const useStage = (player, resetPlayer) => {
                             `${player.collided ? 'merged' : 'clear'}`,
                         ];
                     }
+                    if(player.collided === true) {
+                        plopSound.play();
+                    }
                 });
             });
-            //check is we collided
+            //check if we collided
             if(player.collided) {
                 resetPlayer();
                 return sweepRows(newStage); //return new stage with swept rows

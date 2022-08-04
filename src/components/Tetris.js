@@ -19,12 +19,16 @@ import StartButton from './StartButton';
 //audio
 import waterLoop from './waterloop.wav';
 import musicLoop from './musicloop.mp3';
+import moveSound from './click.wav';
 var audio1 = new Audio(waterLoop);
+var audio3 = new Audio(waterLoop);
 var audio2 = new Audio(musicLoop);
+var click = new Audio(moveSound);
 
 const Tetris = () => { //use curly brackets because there is more logic
     const [dropTime, setDropTime] = useState(null);
     const [gameOver, setGameOver] = useState(null);
+    const [gameStart, setGameStart] = useState(null);
 
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
     const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
@@ -39,10 +43,17 @@ const Tetris = () => { //use curly brackets because there is more logic
 
     function playPauseW() {
         if (audio1.paused) {
+            audio1.volume = 0.05;
             audio1.play();
             audio1.loop = true;
+            setTimeout(() => {
+                audio3.volume = 0.05;
+                audio3.play();
+                audio3.loop = true;
+              }, 5000);
         } else {
             audio1.pause(); 
+            audio3.pause();
         }
       }
 
@@ -62,6 +73,7 @@ const Tetris = () => { //use curly brackets because there is more logic
         setDropTime(1000);
         resetPlayer();
         setGameOver(false);
+        setGameStart(false);
         setScore(0);
         setRows(0);
         setLevel(0);
@@ -102,12 +114,15 @@ const Tetris = () => { //use curly brackets because there is more logic
     }
 
     const move = ({ keyCode }) => {
-        if(!gameOver) {
+        click.volume = 0.4;
+        if(!gameOver && !gameStart) {
             if(keyCode === 37) { //right arrow
                 movePlayer(-1);
+                click.play();
             }
             else if(keyCode === 39) { //left arrow
                 movePlayer(1);
+                click.play();
             }
             else if(keyCode === 40) { //down arrow
                 dropPlayer();
