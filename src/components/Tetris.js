@@ -16,6 +16,12 @@ import Stage from './Stage';
 import Display from './Display';
 import StartButton from './StartButton';
 
+//audio
+import waterLoop from './waterloop.wav';
+import musicLoop from './musicloop.mp3';
+var audio1 = new Audio(waterLoop);
+var audio2 = new Audio(musicLoop);
+
 const Tetris = () => { //use curly brackets because there is more logic
     const [dropTime, setDropTime] = useState(null);
     const [gameOver, setGameOver] = useState(null);
@@ -23,7 +29,6 @@ const Tetris = () => { //use curly brackets because there is more logic
     const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
     const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
     const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
-    
 
     const movePlayer = dir => {
         //if there is no collision, then do the move, otherwise no movement.
@@ -31,6 +36,25 @@ const Tetris = () => { //use curly brackets because there is more logic
             updatePlayerPos({ x: dir, y: 0 });
         }
     }
+
+    function playPauseW() {
+        if (audio1.paused) {
+            audio1.play();
+            audio1.loop = true;
+        } else {
+            audio1.pause(); 
+        }
+      }
+
+    function playPauseM() {
+        if (audio2.paused) {
+            audio2.play();
+            audio2.loop = true;
+        } else {
+            audio2.pause();
+        }
+    }
+      
 
     const startGame = () => {
         //reset everything
@@ -119,6 +143,10 @@ const Tetris = () => { //use curly brackets because there is more logic
                     )}
                     {/* callback prompt */}
                     <StartButton callback={startGame} />
+                    <div>
+                    <button onClick={playPauseM}>Play/Pause Music</button>
+                    <button onClick={playPauseW}>Play/Pause Sounds</button>
+                    </div>
                 </aside>
             </StyledTetris>
         </StyledTetrisWrapper>
