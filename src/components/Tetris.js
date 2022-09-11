@@ -45,11 +45,11 @@ const Tetris = () => { //use curly brackets because there is more logic
 
     function playPauseW() {
         if (audio1.paused) {
-            audio1.volume = 0.05;
+            audio1.volume = 0.04;
             audio1.play();
             audio1.loop = true;
             setTimeout(() => {
-                audio3.volume = 0.05;
+                audio3.volume = 0.04;
                 audio3.play();
                 audio3.loop = true;
               }, 5000);
@@ -61,6 +61,7 @@ const Tetris = () => { //use curly brackets because there is more logic
 
     function playPauseM() {
         if (audio2.paused) {
+            audio2.volume = 0.3;
             audio2.play();
             audio2.loop = true;
         } else {
